@@ -1,0 +1,11 @@
+query GetUsers {
+    users(first: 10) {
+        nodes {
+            id
+            name
+            email
+            gender
+            status
+        }
+    }
+}
