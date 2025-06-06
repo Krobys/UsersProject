@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.android.hilt)
+    alias(libs.plugins.apollo)
     id("kotlin-kapt")
 }
 
@@ -21,6 +21,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL", "\"https://gorest.co.in/public/v2/graphql\"")
     }
 
     buildTypes {
@@ -40,7 +41,14 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
+    }
+}
+
+apollo {
+    service("gorest") {
+        packageName.set("exomind.online")
     }
 }
 
@@ -55,15 +63,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter)
-    implementation(libs.retrofit.logger)
-
-    // room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+    // apollo
+    implementation(libs.apollo.runtime)
+    implementation(libs.apollo.api)
 
     // hilt
     implementation(libs.hilt.android)
