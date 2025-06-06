@@ -3,4 +3,22 @@
     <string name="empty_placeholder_users">The user list is empty. Tap the \"+\" button to add a new user.</string>
     <string name="user_added_message">User added successfully</string>
     <string name="user_error_message">Something went wrong while adding user</string>
+    <string name="user_deleted_message">User deleted successfully</string>
+    <string name="delete_user_error">Something went wrong while deleting user</string>
+
+    <string name="add_new_user">Add New User</string>
+    <string name="label_name">Name</string>
+    <string name="label_email">Email</string>
+    <string name="label_gender">Gender</string>
+    <string name="button_add">Add</string>
+    <string name="button_cancel">Cancel</string>
+
+    <string name="error_try_again">Try again</string>
+
+    <string name="remove_user_title">Remove User</string>
+    <string name="remove_user_message">Are you sure you want to remove this user?</string>
+    <string name="remove_user_confirm">OK</string>
+    <string name="remove_user_cancel">Cancel</string>
+
+    <string name="add_user">Add user</string>
 </resources>

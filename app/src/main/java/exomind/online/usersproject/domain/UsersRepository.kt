@@ -6,5 +6,5 @@ import exomind.online.usersproject.domain.models.User
 interface UsersRepository {
     suspend fun getUsers(): List<User>
     suspend fun addUser(addUser: AddUser)
-    suspend fun removeUser(id: Long)
+    suspend fun removeUser(id: Int)
 }

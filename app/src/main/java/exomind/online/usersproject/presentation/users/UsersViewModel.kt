@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import exomind.online.usersproject.R
 import exomind.online.usersproject.domain.AddUserUseCase
+import exomind.online.usersproject.domain.DeleteUserUseCase
 import exomind.online.usersproject.domain.GetUsersUseCase
 import exomind.online.usersproject.domain.models.AddUser
 import exomind.online.usersproject.presentation.users.models.UIEffect
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UsersViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase,
-    private val addUserUseCase: AddUserUseCase
+    private val addUserUseCase: AddUserUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<UIState>(UIState.Loading)
     val state = _state.asStateFlow()
@@ -40,6 +42,12 @@ class UsersViewModel @Inject constructor(
                     email = event.email,
                     gender = event.gender
                 )
+            }
+            is UIEvent.DeleteUser -> {
+                deleteUser(event.userId)
+            }
+            is UIEvent.Retry -> {
+                getUsers()
             }
         }
     }
@@ -70,6 +78,19 @@ class UsersViewModel @Inject constructor(
                 _effects.emit(UIEffect.ShowToast(R.string.user_added_message))
             }.onFailure {
                 _effects.emit(UIEffect.ShowToast(R.string.user_error_message))
+            }
+        }
+    }
+
+    private fun deleteUser(userId: Int) {
+        viewModelScope.launch {
+            runCatching {
+                deleteUserUseCase(userId)
+            }.onSuccess {
+                getUsers()
+                _effects.emit(UIEffect.ShowToast(R.string.user_deleted_message))
+            }.onFailure {
+                _effects.emit(UIEffect.ShowToast(R.string.delete_user_error))
             }
         }
     }
