@@ -1,7 +1,10 @@
 package exomind.online.usersproject.data.network
 
 import com.apollographql.apollo.ApolloClient
+import exomind.online.CreateUserMutation
 import exomind.online.GetUsersQuery
+import exomind.online.type.CreateUserInput
+import exomind.online.usersproject.domain.models.AddUser
 import javax.inject.Inject
 
 class UsersApi @Inject constructor(
@@ -26,5 +29,25 @@ class UsersApi @Inject constructor(
             ?.filterNotNull()
             ?.map(mapper::nodeToDto)
             ?: emptyList()
+    }
+
+    suspend fun addUser(addUser: AddUser) {
+        val input = CreateUserInput(
+            name = addUser.name,
+            email = addUser.email,
+            gender = addUser.gender,
+            status = "active"
+        )
+
+        val response = apolloClient
+            .mutation(CreateUserMutation(input))
+            .execute()
+
+        response.exception?.let { throw it }
+
+        val errors = response.errors
+        if (!errors.isNullOrEmpty()) {
+            throw Exception(errors.joinToString { it.message })
+        }
     }
 }

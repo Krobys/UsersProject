@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">UsersProject</string>
     <string name="empty_placeholder_users">The user list is empty. Tap the \"+\" button to add a new user.</string>
+    <string name="user_added_message">User added successfully</string>
+    <string name="user_error_message">Something went wrong while adding user</string>
 </resources>

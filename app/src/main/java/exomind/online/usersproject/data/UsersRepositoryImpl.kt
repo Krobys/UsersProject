@@ -17,7 +17,7 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addUser(addUser: AddUser) {
-        TODO("Not yet implemented")
+        api.addUser(addUser)
     }
 
     override suspend fun removeUser(id: Long) {
