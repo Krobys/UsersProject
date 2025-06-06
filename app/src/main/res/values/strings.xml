@@ -13,6 +13,10 @@
     <string name="button_add">Add</string>
     <string name="button_cancel">Cancel</string>
 
+    <string name="error_name_required">Name cannot be empty</string>
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_gender_required">Please select gender</string>
+
     <string name="error_try_again">Try again</string>
 
     <string name="remove_user_title">Remove User</string>
