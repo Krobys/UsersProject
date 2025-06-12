@@ -144,15 +144,13 @@ private fun UserItem(
 private fun SuccessViewPreview() {
     UsersProjectTheme {
         SuccessView(
-            users = buildList {
-                repeat(10) { n ->
-                    add(User(
-                        id = 1,
-                        name = "user $n",
-                        email = "email$n@test.com",
-                        gender = "male"
-                    ))
-                }
+            users = List(100) { n ->
+                User(
+                    id = 1,
+                    name = "user $n",
+                    email = "email$n@test.com",
+                    gender = "male"
+                )
             },
             addUser = { },
             deleteUser = { }

@@ -100,7 +100,7 @@ class UsersViewModelTest {
                         gender = "male"
                     )
                 )
-            } returns Unit
+            }
 
             // WHEN
             viewModel = UsersViewModel(getUsersUseCase, addUserUseCase, deleteUserUseCase)
