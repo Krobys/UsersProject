@@ -1,0 +1,993 @@
+"""
+Represents `true` or `false` values.
+"""
+scalar Boolean
+
+"""
+Represents a unique identifier that is Base64 obfuscated. It is often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"VXNlci0xMA=="`) or integer (such as `4`) input value will be accepted as an ID.
+"""
+scalar ID
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime
+
+"""
+Represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+"""
+scalar Int
+
+type Mutation {
+  createComment("Parameters for createComment" input: createCommentInput!): createCommentPayload
+
+  createPost("Parameters for createPost" input: createPostInput!): createPostPayload
+
+  createTodo("Parameters for createTodo" input: createTodoInput!): createTodoPayload
+
+  createUser("Parameters for createUser" input: createUserInput!): createUserPayload
+
+  deleteComment("Parameters for deleteComment" input: deleteCommentInput!): deleteCommentPayload
+
+  deletePost("Parameters for deletePost" input: deletePostInput!): deletePostPayload
+
+  deleteTodo("Parameters for deleteTodo" input: deleteTodoInput!): deleteTodoPayload
+
+  deleteUser("Parameters for deleteUser" input: deleteUserInput!): deleteUserPayload
+
+  updateComment("Parameters for updateComment" input: updateCommentInput!): updateCommentPayload
+
+  updatePost("Parameters for updatePost" input: updatePostInput!): updatePostPayload
+
+  updateTodo("Parameters for updateTodo" input: updateTodoInput!): updateTodoPayload
+
+  updateUser("Parameters for updateUser" input: updateUserInput!): updateUserPayload
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+type Query {
+  """
+  Find a comment by ID
+  """
+  comment(id: ID!): comment
+
+  """
+  List of comments
+  """
+  comments("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): commentConnection!
+
+  """
+  Find a post by ID
+  """
+  post(id: ID!): post
+
+  """
+  List of posts
+  """
+  posts("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): postConnection!
+
+  """
+  Find a todo by ID
+  """
+  todo(id: ID!): todo
+
+  """
+  List of todos
+  """
+  todos("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): todoConnection!
+
+  """
+  Find a user by ID
+  """
+  user(id: ID!): user
+
+  """
+  List of users
+  """
+  users("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): userConnection!
+}
+
+"""
+Represents textual data as UTF-8 character sequences. This type is most often used by GraphQL to represent free-form human-readable text.
+"""
+scalar String
+
+"""
+A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
+
+In some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.
+"""
+type __Directive {
+  args(includeDeprecated: Boolean = false): [__InputValue!]!
+
+  description: String
+
+  isRepeatable: Boolean
+
+  locations: [__DirectiveLocation!]!
+
+  name: String!
+
+  onField: Boolean! @deprecated(reason: "Use `locations`.")
+
+  onFragment: Boolean! @deprecated(reason: "Use `locations`.")
+
+  onOperation: Boolean! @deprecated(reason: "Use `locations`.")
+}
+
+"""
+A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.
+"""
+enum __DirectiveLocation {
+  """
+  Location adjacent to a query operation.
+  """
+  QUERY
+
+  """
+  Location adjacent to a mutation operation.
+  """
+  MUTATION
+
+  """
+  Location adjacent to a subscription operation.
+  """
+  SUBSCRIPTION
+
+  """
+  Location adjacent to a field.
+  """
+  FIELD
+
+  """
+  Location adjacent to a fragment definition.
+  """
+  FRAGMENT_DEFINITION
+
+  """
+  Location adjacent to a fragment spread.
+  """
+  FRAGMENT_SPREAD
+
+  """
+  Location adjacent to an inline fragment.
+  """
+  INLINE_FRAGMENT
+
+  """
+  Location adjacent to a schema definition.
+  """
+  SCHEMA
+
+  """
+  Location adjacent to a scalar definition.
+  """
+  SCALAR
+
+  """
+  Location adjacent to an object type definition.
+  """
+  OBJECT
+
+  """
+  Location adjacent to a field definition.
+  """
+  FIELD_DEFINITION
+
+  """
+  Location adjacent to an argument definition.
+  """
+  ARGUMENT_DEFINITION
+
+  """
+  Location adjacent to an interface definition.
+  """
+  INTERFACE
+
+  """
+  Location adjacent to a union definition.
+  """
+  UNION
+
+  """
+  Location adjacent to an enum definition.
+  """
+  ENUM
+
+  """
+  Location adjacent to an enum value definition.
+  """
+  ENUM_VALUE
+
+  """
+  Location adjacent to an input object type definition.
+  """
+  INPUT_OBJECT
+
+  """
+  Location adjacent to an input object field definition.
+  """
+  INPUT_FIELD_DEFINITION
+
+  """
+  Location adjacent to a variable definition.
+  """
+  VARIABLE_DEFINITION
+}
+
+"""
+One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.
+"""
+type __EnumValue {
+  deprecationReason: String
+
+  description: String
+
+  isDeprecated: Boolean!
+
+  name: String!
+}
+
+"""
+Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.
+"""
+type __Field {
+  args(includeDeprecated: Boolean = false): [__InputValue!]!
+
+  deprecationReason: String
+
+  description: String
+
+  isDeprecated: Boolean!
+
+  name: String!
+
+  type: __Type!
+}
+
+"""
+Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.
+"""
+type __InputValue {
+  """
+  A GraphQL-formatted string representing the default value for this input value.
+  """
+  defaultValue: String
+
+  deprecationReason: String
+
+  description: String
+
+  isDeprecated: Boolean!
+
+  name: String!
+
+  type: __Type!
+}
+
+"""
+A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.
+"""
+type __Schema {
+  description: String
+
+  """
+  A list of all directives supported by this server.
+  """
+  directives: [__Directive!]!
+
+  """
+  If this server supports mutation, the type that mutation operations will be rooted at.
+  """
+  mutationType: __Type
+
+  """
+  The type that query operations will be rooted at.
+  """
+  queryType: __Type!
+
+  """
+  If this server support subscription, the type that subscription operations will be rooted at.
+  """
+  subscriptionType: __Type
+
+  """
+  A list of all types supported by this server.
+  """
+  types: [__Type!]!
+}
+
+"""
+The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+
+Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name and description, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+"""
+type __Type {
+  description: String
+
+  enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
+
+  fields(includeDeprecated: Boolean = false): [__Field!]
+
+  inputFields(includeDeprecated: Boolean = false): [__InputValue!]
+
+  interfaces: [__Type!]
+
+  isOneOf: Boolean!
+
+  kind: __TypeKind!
+
+  name: String
+
+  ofType: __Type
+
+  possibleTypes: [__Type!]
+
+  specifiedByURL: String
+}
+
+"""
+An enum describing what kind of type a given `__Type` is.
+"""
+enum __TypeKind {
+  """
+  Indicates this type is a scalar.
+  """
+  SCALAR
+
+  """
+  Indicates this type is an object. `fields` and `interfaces` are valid fields.
+  """
+  OBJECT
+
+  """
+  Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.
+  """
+  INTERFACE
+
+  """
+  Indicates this type is a union. `possibleTypes` is a valid field.
+  """
+  UNION
+
+  """
+  Indicates this type is an enum. `enumValues` is a valid field.
+  """
+  ENUM
+
+  """
+  Indicates this type is an input object. `inputFields` is a valid field.
+  """
+  INPUT_OBJECT
+
+  """
+  Indicates this type is a list. `ofType` is a valid field.
+  """
+  LIST
+
+  """
+  Indicates this type is a non-null. `ofType` is a valid field.
+  """
+  NON_NULL
+}
+
+type comment {
+  body: String
+
+  email: String
+
+  id: Int!
+
+  name: String
+
+  post: post!
+
+  postId: Int!
+}
+
+"""
+The connection type for comment.
+"""
+type commentConnection {
+  """
+  A list of edges.
+  """
+  edges: [commentEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [comment]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Total count of items
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type commentEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: comment
+}
+
+"""
+Autogenerated input type of createComment
+"""
+input createCommentInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  postId: Int!
+
+  name: String!
+
+  email: String!
+
+  body: String!
+}
+
+"""
+Autogenerated return type of createComment.
+"""
+type createCommentPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  comment: comment
+}
+
+"""
+Autogenerated input type of createPost
+"""
+input createPostInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  userId: Int!
+
+  title: String!
+
+  body: String!
+}
+
+"""
+Autogenerated return type of createPost.
+"""
+type createPostPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  post: post
+}
+
+"""
+Autogenerated input type of createTodo
+"""
+input createTodoInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  userId: Int!
+
+  title: String!
+
+  dueOn: ISO8601DateTime!
+
+  status: String!
+}
+
+"""
+Autogenerated return type of createTodo.
+"""
+type createTodoPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  todo: todo
+}
+
+"""
+Autogenerated input type of createUser
+"""
+input createUserInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  name: String!
+
+  email: String!
+
+  gender: String!
+
+  status: String!
+}
+
+"""
+Autogenerated return type of createUser.
+"""
+type createUserPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  user: user
+}
+
+"""
+Autogenerated input type of deleteComment
+"""
+input deleteCommentInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+}
+
+"""
+Autogenerated return type of deleteComment.
+"""
+type deleteCommentPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  comment: comment
+}
+
+"""
+Autogenerated input type of deletePost
+"""
+input deletePostInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+}
+
+"""
+Autogenerated return type of deletePost.
+"""
+type deletePostPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  post: post
+}
+
+"""
+Autogenerated input type of deleteTodo
+"""
+input deleteTodoInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+}
+
+"""
+Autogenerated return type of deleteTodo.
+"""
+type deleteTodoPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  todo: todo
+}
+
+"""
+Autogenerated input type of deleteUser
+"""
+input deleteUserInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+}
+
+"""
+Autogenerated return type of deleteUser.
+"""
+type deleteUserPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  user: user
+}
+
+type post {
+  body: String!
+
+  """
+  List of comments
+  """
+  comments("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): commentConnection!
+
+  id: Int!
+
+  title: String!
+
+  user: user!
+
+  userId: Int!
+}
+
+"""
+The connection type for post.
+"""
+type postConnection {
+  """
+  A list of edges.
+  """
+  edges: [postEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [post]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Total count of items
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type postEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: post
+}
+
+type todo {
+  dueOn: ISO8601DateTime
+
+  id: Int!
+
+  status: String!
+
+  title: String!
+
+  user: user!
+
+  userId: Int!
+}
+
+"""
+The connection type for todo.
+"""
+type todoConnection {
+  """
+  A list of edges.
+  """
+  edges: [todoEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [todo]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Total count of items
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type todoEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: todo
+}
+
+"""
+Autogenerated input type of updateComment
+"""
+input updateCommentInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+
+  postId: Int
+
+  name: String
+
+  email: String
+
+  body: String
+}
+
+"""
+Autogenerated return type of updateComment.
+"""
+type updateCommentPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  comment: comment
+}
+
+"""
+Autogenerated input type of updatePost
+"""
+input updatePostInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+
+  userId: Int
+
+  title: String
+
+  body: String
+}
+
+"""
+Autogenerated return type of updatePost.
+"""
+type updatePostPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  post: post
+}
+
+"""
+Autogenerated input type of updateTodo
+"""
+input updateTodoInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+
+  userId: Int
+
+  title: String
+
+  dueOn: ISO8601DateTime
+
+  status: String
+}
+
+"""
+Autogenerated return type of updateTodo.
+"""
+type updateTodoPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  todo: todo
+}
+
+"""
+Autogenerated input type of updateUser
+"""
+input updateUserInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  id: Int!
+
+  name: String
+
+  email: String
+
+  gender: String
+
+  status: String
+}
+
+"""
+Autogenerated return type of updateUser.
+"""
+type updateUserPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  user: user
+}
+
+type user {
+  email: String!
+
+  gender: String!
+
+  id: Int!
+
+  name: String!
+
+  """
+  List of posts
+  """
+  posts("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): postConnection!
+
+  status: String!
+
+  """
+  List of todos
+  """
+  todos("Returns the elements in the list that come after the specified cursor." after: String, "Returns the elements in the list that come before the specified cursor." before: String, "Returns the first _n_ elements from the list." first: Int, "Returns the last _n_ elements from the list." last: Int): todoConnection!
+}
+
+"""
+The connection type for user.
+"""
+type userConnection {
+  """
+  A list of edges.
+  """
+  edges: [userEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [user]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Total count of items
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type userEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: user
+}
+
+"""
+Marks an element of a GraphQL schema as no longer supported.
+"""
+directive @deprecated ("Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/)." reason: String = "No longer supported") on FIELD_DEFINITION|ENUM_VALUE|ARGUMENT_DEFINITION|INPUT_FIELD_DEFINITION
+
+"""
+Directs the executor to include this field or fragment only when the `if` argument is true.
+"""
+directive @include ("Included when true." if: Boolean!) on FIELD|FRAGMENT_SPREAD|INLINE_FRAGMENT
+
+"""
+Requires that exactly one field must be supplied and that field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""
+Directs the executor to skip this field or fragment when the `if` argument is true.
+"""
+directive @skip ("Skipped when true." if: Boolean!) on FIELD|FRAGMENT_SPREAD|INLINE_FRAGMENT
+
+"""
+Exposes a URL that specifies the behavior of this scalar.
+"""
+directive @specifiedBy ("The URL that specifies the behavior of this scalar." url: String!) on SCALAR
+
+schema {
+  query: Query
+  mutation: Mutation
+}

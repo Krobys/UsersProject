@@ -43,6 +43,8 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 
 apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.ref = "apollo" }
+apollo-normalizedCache = { module = "com.apollographql.apollo:apollo-normalized-cache", version = "4.3.0"}
+apollo-normalizedCache-sqlite = { module = "com.apollographql.apollo:apollo-normalized-cache-sqlite", version = "4.3.0"}
 
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 

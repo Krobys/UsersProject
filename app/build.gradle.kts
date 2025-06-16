@@ -49,6 +49,10 @@ android {
 apollo {
     service("gorest") {
         packageName.set("exomind.online")
+        introspection {
+            endpointUrl.set("https://gorest.co.in/public/v2/graphql")
+            schemaFile.set(file("src/main/graphql/schema.graphqls"))
+        }
     }
 }
 
@@ -66,6 +70,8 @@ dependencies {
     // apollo
     implementation(libs.apollo.runtime)
     implementation(libs.apollo.api)
+    implementation(libs.apollo.normalizedCache)
+    implementation(libs.apollo.normalizedCache.sqlite)
 
     // hilt
     implementation(libs.hilt.android)
