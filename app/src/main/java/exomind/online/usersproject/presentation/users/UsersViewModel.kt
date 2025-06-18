@@ -69,32 +69,36 @@ class UsersViewModel @Inject constructor(
 
     private fun addUser(name: String, email: String, gender: String) {
         viewModelScope.launch {
-            runCatching {
-                val addUser = AddUser(
-                    name = name,
-                    email = email,
-                    gender = gender
+            val addUser = AddUser(
+                name = name,
+                email = email,
+                gender = gender
+            )
+            addUserUseCase.invoke(addUser)
+                .fold(
+                    onSuccess = {
+                        getUsers()
+                        _effects.emit(UIEffect.ShowToast(R.string.user_added_message))
+                    },
+                    onFailure = {
+                        _effects.emit(UIEffect.ShowToast(R.string.user_error_message))
+                    }
                 )
-                addUserUseCase(addUser)
-            }.onSuccess {
-                getUsers()
-                _effects.emit(UIEffect.ShowToast(R.string.user_added_message))
-            }.onFailure {
-                _effects.emit(UIEffect.ShowToast(R.string.user_error_message))
-            }
         }
     }
 
     private fun deleteUser(userId: Int) {
         viewModelScope.launch {
-            runCatching {
-                deleteUserUseCase(userId)
-            }.onSuccess {
-                getUsers()
-                _effects.emit(UIEffect.ShowToast(R.string.user_deleted_message))
-            }.onFailure {
-                _effects.emit(UIEffect.ShowToast(R.string.delete_user_error))
-            }
+            deleteUserUseCase.invoke(userId)
+                .fold(
+                    onSuccess = {
+                        getUsers()
+                        _effects.emit(UIEffect.ShowToast(R.string.user_deleted_message))
+                    },
+                    onFailure = {
+                        _effects.emit(UIEffect.ShowToast(R.string.delete_user_error))
+                    }
+                )
         }
     }
 }

@@ -4,6 +4,7 @@ import exomind.online.usersproject.domain.models.AddUser
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -25,13 +26,16 @@ class AddUserUseCaseTest {
         coVerify { repository.addUser(newUser) }
     }
 
-    @Test(expected = Exception::class)
-    fun `invoke throws exception when repository fails`() = runTest {
+    @Test
+    fun `invoke returns result fail when repository fails`() = runTest {
         // GIVEN
         val newUser = AddUser(name = "Mark", email = "mark@test", gender = "male")
         coEvery { repository.addUser(newUser) } throws Exception("Repository error")
 
         // WHEN
-        useCase(newUser)
+        val result = useCase.invoke(newUser)
+
+        // THEN
+        assertEquals(true, result.isFailure)
     }
 }

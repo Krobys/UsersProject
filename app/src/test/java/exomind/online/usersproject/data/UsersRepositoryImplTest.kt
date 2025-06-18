@@ -9,6 +9,9 @@ import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -24,7 +27,7 @@ class UsersRepositoryImplTest {
         // GIVEN
         val dto1 = UserDto(id = 1, name = "Alice", email = "alice@test", gender = "female")
         val dto2 = UserDto(id = 2, name = "Bob", email = "bob@test", gender = "male")
-        coEvery { api.getUsers() } returns listOf(dto1, dto2)
+        coEvery { api.getUsers() } returns flowOf(listOf(dto1, dto2))
         val domain1 = User(id = 1, name = "Alice", email = "alice@test", gender = "female")
         val domain2 = User(id = 2, name = "Bob", email = "bob@test", gender = "male")
         coEvery { mapper.dtoToDomain(dto1) } returns domain1
@@ -34,7 +37,7 @@ class UsersRepositoryImplTest {
         val result = repository.getUsers()
 
         // THEN
-        assertEquals(listOf(domain1, domain2), result)
+        assertEquals(listOf(domain1, domain2), result.first())
         coVerify(exactly = 1) { api.getUsers() }
         coVerify(exactly = 1) { mapper.dtoToDomain(dto1) }
         coVerify(exactly = 1) { mapper.dtoToDomain(dto2) }

@@ -16,6 +16,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -27,6 +29,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.lang.RuntimeException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UsersViewModelTest {
@@ -55,7 +58,7 @@ class UsersViewModelTest {
         val users = listOf(
             User(id = 1, name = "Alice", email = "alice@test", gender = "female")
         )
-        coEvery { getUsersUseCase() } returns users
+        coEvery { getUsersUseCase() } returns flowOf(users)
 
         // WHEN
         viewModel = UsersViewModel(getUsersUseCase, addUserUseCase, deleteUserUseCase)
@@ -70,7 +73,7 @@ class UsersViewModelTest {
     @Test
     fun `initial state is Error when getUsersUseCase fails`() = runTest {
         // GIVEN
-        coEvery { getUsersUseCase() } throws RuntimeException("fail")
+        coEvery { getUsersUseCase() } returns flow { throw RuntimeException("fail") }
 
         // WHEN
         viewModel = UsersViewModel(getUsersUseCase, addUserUseCase, deleteUserUseCase)
@@ -91,7 +94,7 @@ class UsersViewModelTest {
                 User(id = 1, name = "A", email = "a@test", gender = "female"),
                 User(id = 2, name = "B", email = "b@test", gender = "male")
             )
-            coEvery { getUsersUseCase() } returnsMany listOf(usersFirst, usersAfter)
+            coEvery { getUsersUseCase() } returnsMany listOf(flowOf(usersFirst), flowOf(usersAfter))
             coEvery {
                 addUserUseCase(
                     AddUser(
@@ -100,7 +103,7 @@ class UsersViewModelTest {
                         gender = "male"
                     )
                 )
-            }
+            } returns Result.success(Unit)
 
             // WHEN
             viewModel = UsersViewModel(getUsersUseCase, addUserUseCase, deleteUserUseCase)
@@ -138,8 +141,8 @@ class UsersViewModelTest {
             // GIVEN
             val usersFirst = listOf(User(id = 1, name = "A", email = "a@test", gender = "female"))
             val usersAfter = emptyList<User>()
-            coEvery { getUsersUseCase() } returnsMany listOf(usersFirst, usersAfter)
-            coEvery { deleteUserUseCase(1) } returns Unit
+            coEvery { getUsersUseCase() } returnsMany listOf(flowOf(usersFirst), flowOf(usersAfter))
+            coEvery { deleteUserUseCase(1) } returns Result.success(Unit)
 
             // WHEN
             viewModel = UsersViewModel(getUsersUseCase, addUserUseCase, deleteUserUseCase)
@@ -167,7 +170,7 @@ class UsersViewModelTest {
     fun `onEvent Retry calls getUsersUseCase again`() = runTest {
         // GIVEN
         val users = listOf(User(id = 1, name = "A", email = "a@test", gender = "female"))
-        coEvery { getUsersUseCase() } returns users
+        coEvery { getUsersUseCase() } returns flowOf(users)
 
         // WHEN
         viewModel = UsersViewModel(getUsersUseCase, addUserUseCase, deleteUserUseCase)
