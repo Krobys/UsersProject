@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ import javax.inject.Inject
 class UsersViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase,
     private val addUserUseCase: AddUserUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow<UIState>(UIState.Loading)
     val state = _state.asStateFlow()
@@ -35,7 +36,7 @@ class UsersViewModel @Inject constructor(
     }
 
     fun onEvent(event: UIEvent) {
-        when(event) {
+        when (event) {
             is UIEvent.AddUser -> {
                 addUser(
                     name = event.name,
@@ -43,9 +44,11 @@ class UsersViewModel @Inject constructor(
                     gender = event.gender
                 )
             }
+
             is UIEvent.DeleteUser -> {
                 deleteUser(event.userId)
             }
+
             is UIEvent.Retry -> {
                 getUsers()
             }
@@ -54,13 +57,13 @@ class UsersViewModel @Inject constructor(
 
     private fun getUsers() {
         viewModelScope.launch {
-            runCatching {
-                getUsersUseCase()
-            }.onSuccess { users ->
-                _state.value = UIState.Success(users)
-            }.onFailure { error ->
-                _state.value = UIState.Error(error.message ?: "Something went wrong")
-            }
+            getUsersUseCase.invoke()
+                .catch { error ->
+                    _state.value = UIState.Error(error.message ?: "Something went wrong")
+                }
+                .collect { users ->
+                    _state.value = UIState.Success(users)
+                }
         }
     }
 
